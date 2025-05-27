@@ -27,7 +27,6 @@
     <ul>
       <li>+20 classes Java organizadas por responsabilidade</li>
       <li><code>api.email</code> para integração com Gmail</li>
-      <li><code>model</code>, <code>view</code> e <code>controller</code> separados</li>
     </ul>
   </div>
 
@@ -35,28 +34,14 @@
     <h2>📁 Arquivos Inclusos</h2>
     <ul>
       <li><span class="badge">PDF</span> Explicação do projeto</li>
-      <li><span class="badge">PDF</span> Atividade original (enunciado)</li>
+      <li><span class="badge">PDF</span> Atividade original (Projeto-Ds)</li>
       <li><span class="badge">IMG</span> Diagrama de classes UML</li>
     </ul>
   </div>
 
-  <div class="section">
-    <h2>🚀 Como Executar</h2>
-    <ol>
-      <li>Importe o projeto em sua IDE Java favorita</li>
-      <li>Compile e execute a classe <code>Main.java</code></li>
-      <li>Explore a interface e simule uma compra para testar o envio de email</li>
-    </ol>
-  </div>
+ 
 
-  <div class="section">
-    <h2>📧 Envio por Gmail</h2>
-    <p>O sistema utiliza um conjunto de dependências para envio de email automático após a compra, usando uma conta de Gmail previamente configurada.</p>
-  </div>
-
-  <footer>
-    <p><strong>Autor:</strong> [Seu Nome] | <strong>GitHub:</strong> <a href="https://github.com/seuusuario">seuusuario</a></p>
-  </footer>
+  
 
 </body>
 </html>
