@@ -4,38 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>README - Projeto Biblioteca Java</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      margin: 40px;
-      line-height: 1.6;
-    }
-    h1, h2 {
-      color: #004080;
-    }
-    code {
-      background-color: #eaeaea;
-      padding: 2px 4px;
-      border-radius: 4px;
-    }
-    .section {
-      margin-bottom: 30px;
-    }
-    ul {
-      margin-left: 20px;
-    }
-    .badge {
-      display: inline-block;
-      background: #004080;
-      color: #fff;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.8em;
-      margin-right: 6px;
-    }
-  </style>
+
+   
 </head>
 <body>
 
