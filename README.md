@@ -26,7 +26,7 @@
     <h2>📦 Estrutura</h2>
     <ul>
       <li>+20 classes Java organizadas por responsabilidade</li>
-      <li><code>api.email</code> para integração com Gmail</li>
+      <li>Sistema semelhante <code>api.email</code> para integração com Gmail</li>
     </ul>
   </div>
 
