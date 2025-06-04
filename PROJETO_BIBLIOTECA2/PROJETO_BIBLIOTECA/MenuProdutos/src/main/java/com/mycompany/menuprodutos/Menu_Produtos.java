@@ -44,10 +44,32 @@ public class Menu_Produtos extends JFrame {
     
 
     public Menu_Produtos() {
-        setTitle("Livraria Entre Palavras");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+         setTitle("Livraria Entre Palavras");
+        // setExtendedState(JFrame.MAXIMIZED_BOTH); // <-- REMOVA OU COMENTE ESTA LINHA
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Define a janela para não ser redimensionável
+        setResizable(false); // Mantemos esta linha
+
+        // Obtenha as dimensões da tela, excluindo a barra de tarefas
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        Rectangle bounds = gd.getDefaultConfiguration().getBounds();
+        Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(gd.getDefaultConfiguration());
+
+        // Calcule a largura e altura máximas que respeitam a barra de tarefas
+        int width = bounds.width - insets.left - insets.right;
+        int height = bounds.height - insets.top - insets.bottom;
+
+        // Defina o tamanho da janela para essas dimensões
+        setSize(width, height);
+
+        // Posicione a janela no canto superior esquerdo da área de trabalho "útil"
+        setLocation(insets.left, insets.top);
+
+       
+        
         ImageIcon icon = new ImageIcon("src/assets/images/Logo.png");
         setIconImage(icon.getImage());
 
@@ -59,6 +81,8 @@ public class Menu_Produtos extends JFrame {
         JPanel header = criarHeader();
         add(header, BorderLayout.NORTH);
 
+        // O layout do produtosPanelContainer e produtosGridPanel permanece como você o tinha
+        // (com FlowLayout para o container e GridLayout para o grid)
         produtosPanelContainer = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         produtosPanelContainer.setBackground(new Color(244, 240, 230));
 
@@ -117,7 +141,8 @@ public class Menu_Produtos extends JFrame {
     searchPanel.setBackground(navbarColor);
     searchPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    campoPesquisa = new RoundedTextField(40);
+    // Certifique-se de que 'campoPesquisa' é uma RoundedTextField
+    campoPesquisa = new RoundedTextField(40); // Assumindo que RoundedTextField é acessível
     campoPesquisa.setFont(new Font("Serif", Font.PLAIN, 18));
     campoPesquisa.setPreferredSize(new Dimension(350, 35));
     campoPesquisa.setMaximumSize(new Dimension(400, 40));
@@ -148,7 +173,7 @@ public class Menu_Produtos extends JFrame {
     });
     topRowPanel.add(searchPanel, BorderLayout.CENTER);
 
-    // Painel da Direita (Botão Sair e Carrinho)
+    // Painel da Direita (Botão Sair, Botão Conta e Carrinho)
     JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     rightPanel.setBackground(navbarColor);
 
@@ -159,6 +184,46 @@ public class Menu_Produtos extends JFrame {
     btnSair.setFont(new Font("Serif", Font.BOLD, 16));
     btnSair.addActionListener(e -> System.exit(0));
     rightPanel.add(btnSair);
+
+    // --- NOVO BOTÃO DE CONTA ---
+    String contaImagePath = "src/assets/images/imagem_conta.png"; // Substitua pelo caminho da sua imagem
+    // Por exemplo: src/assets/images/icone_conta.png ou use um emoji se não tiver a imagem
+    ImageIcon contaIcon = new ImageIcon(contaImagePath);
+    if (contaIcon.getImageLoadStatus() == MediaTracker.COMPLETE) {
+        Image contaImage = contaIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        contaIcon = new ImageIcon(contaImage);
+        JLabel contaLabel = new JLabel(contaIcon);
+        contaLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        contaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                // Abre a TelaInicial
+                TelaInicial telaInicialJanela = new TelaInicial();
+                telaInicialJanela.setVisible(true);
+                // Opcional: Para fechar a janela atual (Menu_Produtos) ao abrir a TelaInicial, adicione:
+                // dispose(); 
+            }
+        });
+        rightPanel.add(Box.createHorizontalStrut(10)); // Espaçamento entre Sair e Conta
+        rightPanel.add(contaLabel);
+    } else {
+        // Se a imagem da conta não carregar, adicione um texto alternativo ou trate o erro
+        JLabel contaLabel = new JLabel("👤"); // Emoji de usuário como alternativa
+        contaLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+        contaLabel.setForeground(Color.WHITE);
+        contaLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        contaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TelaInicial telaInicialJanela = new TelaInicial();
+                telaInicialJanela.setVisible(true);
+                // Opcional: Para fechar a janela atual (Menu_Produtos) ao abrir a TelaInicial, adicione:
+                // dispose();
+            }
+        });
+        rightPanel.add(Box.createHorizontalStrut(10));
+        rightPanel.add(contaLabel);
+        System.err.println("Erro ao carregar a imagem da conta: " + contaImagePath);
+    }
+    // --- FIM DO NOVO BOTÃO DE CONTA ---
 
     // Adicionar ícone de carrinho com ActionListener para abrir MenuDoCarrinho
     String carrinhoImagePath = "src/assets/images/carrinho_branco.png"; // Substitua pelo caminho da sua imagem
@@ -174,7 +239,7 @@ public class Menu_Produtos extends JFrame {
                 carrinhoJanela.setVisible(true);
             }
         });
-        rightPanel.add(Box.createHorizontalStrut(10)); // Espaçamento entre sair e carrinho
+        rightPanel.add(Box.createHorizontalStrut(10)); // Espaçamento entre Conta e Carrinho
         rightPanel.add(carrinhoLabel);
     } else {
         // Se a imagem do carrinho não carregar, adicione um texto alternativo ou trate o erro

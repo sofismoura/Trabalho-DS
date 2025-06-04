@@ -1,6 +1,8 @@
 com\mycompany\menuprodutos\Cd.class
 com\mycompany\menuprodutos\MenuDoCarrinho.class
+com\mycompany\menuprodutos\Menu_Produtos$4.class
 com\mycompany\menuprodutos\MenuDoCarrinho$1.class
+com\mycompany\menuprodutos\TelaInicial.class
 com\mycompany\menuprodutos\MenuConfig.class
 com\mycompany\menuprodutos\RoundedPanel3.class
 com\mycompany\menuprodutos\MenuProdutos$1.class
@@ -9,6 +11,7 @@ com\mycompany\menuprodutos\EmailSender.class
 com\mycompany\menuprodutos\FormularioPedido$2.class
 com\mycompany\menuprodutos\MenuProdutos.class
 com\mycompany\menuprodutos\FormularioPedido$1.class
+com\mycompany\menuprodutos\TelaLogin.class
 com\mycompany\menuprodutos\Dvd.class
 com\mycompany\menuprodutos\Livro.class
 com\mycompany\menuprodutos\LogoPanel.class
@@ -17,8 +20,10 @@ com\mycompany\menuprodutos\RoundedWindow.class
 com\mycompany\menuprodutos\Menu_Produtos.class
 com\mycompany\menuprodutos\RoundedPanel2.class
 com\mycompany\menuprodutos\Menu.class
+com\mycompany\menuprodutos\TelaLoginAdmin.class
 com\mycompany\menuprodutos\FormularioPedido.class
 com\mycompany\menuprodutos\EmailSender$1.class
+com\mycompany\menuprodutos\Menu_Produtos$5.class
 com\mycompany\menuprodutos\RoundedCardPanel.class
 com\mycompany\menuprodutos\Menu_Produtos$3.class
 novoPack\BancoDeDados.class
