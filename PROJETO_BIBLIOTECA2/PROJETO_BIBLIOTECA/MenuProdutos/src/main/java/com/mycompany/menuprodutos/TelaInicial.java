@@ -9,10 +9,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class TelaInicial extends JFrame {
-    // criei a classe TelaInicial que é uma janela (herda JFrame, que é janela pronta)
+    // Cria a classe TelaInicial que é uma janela (herda JFrame, que é janela pronta)
 
     public TelaInicial() {
-        // construtor, que roda assim que a tela aparece — aqui a gente monta tudo
+        // Construtor, que roda assim que a tela aparece — aqui a gente monta tudo
 
         setTitle("Livraria Entre Palavras - Login"); // Adicionado título da janela
         setResizable(false); // Torna a janela não redimensionável
@@ -129,10 +129,22 @@ public class TelaInicial extends JFrame {
         setLocationRelativeTo(null); // Centraliza a janela na tela do computador
         setVisible(true); // Deixa a janela visível pra aparecer pra gente
 
-        // Ações dos botões (você pode adaptar pra abrir outras telas)
+        // Ações dos botões
         btnCadastro.addActionListener(e -> JOptionPane.showMessageDialog(this, "Abrir tela de cadastro"));
-        btnLogin.addActionListener(e -> JOptionPane.showMessageDialog(this, "Abrir tela de login"));
-        btnAdmin.addActionListener(e -> JOptionPane.showMessageDialog(this, "Abrir área de administrador"));
+        
+        // Ação para o botão LOGIN: abre TelaLogin e fecha TelaInicial
+        btnLogin.addActionListener(e -> {
+            TelaLogin telaLogin = new TelaLogin();
+            telaLogin.setVisible(true);
+            this.dispose(); // Fecha a TelaInicial
+        });
+
+        // Ação para o botão ADMINISTRADORES: abre TelaLoginAdmin e fecha TelaInicial
+        btnAdmin.addActionListener(e -> {
+            TelaLoginAdmin telaLoginAdmin = new TelaLoginAdmin();
+            telaLoginAdmin.setVisible(true);
+            this.dispose(); // Fecha a TelaInicial
+        });
     }
 
     private JButton criarBotao(String texto) {
@@ -146,13 +158,4 @@ public class TelaInicial extends JFrame {
         return botao;
     }
 
-    // Método main para testar a TelaInicial separadamente, se desejar
-    /*
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new TelaInicial();
-        });
-    }
-    */
 }
-

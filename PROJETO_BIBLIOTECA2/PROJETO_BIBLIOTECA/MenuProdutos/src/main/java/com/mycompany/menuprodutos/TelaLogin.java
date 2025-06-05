@@ -4,23 +4,58 @@
  */
 package com.mycompany.menuprodutos;
 
-// Aqui é onde importo tudo que preciso pra fazer a interface bonitona funcionar
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 /**
  *
  * @author dti
  */
-public class TelaLogin extends JFrame{
+public class TelaLogin extends JFrame {
     
-    public TelaLogin(){
+    public TelaLogin() {
+        setTitle("Livraria Entre Palavras - Login de Usuário");
+        setResizable(false); 
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+
+        ImageIcon icon = new ImageIcon("src/assets/images/Logo.png");
+        if (icon.getImageLoadStatus() == MediaTracker.COMPLETE) {
+            setIconImage(icon.getImage());
+        } else {
+            System.err.println("Erro ao carregar a imagem do ícone da TelaLogin: src/assets/images/Logo.png");
+        }
+
+        JPanel painelPrincipal = new JPanel();
+        painelPrincipal.setLayout(new BorderLayout()); 
+        painelPrincipal.setBackground(new Color(249, 237, 202)); 
         
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setBackground(new Color(249, 237, 202));
-        painel.setBorder(BorderFactory.createEmptyBorder(20, 30,20,30));
-        
+        JPanel logoTopPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        logoTopPanel.setBackground(new Color(115, 103, 47)); 
+        logoTopPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        String logoPath = "src/assets/images/Logo.png";
+        ImageIcon logoIcon = new ImageIcon(logoPath);
+        if (logoIcon.getImageLoadStatus() == MediaTracker.COMPLETE) {
+            Image logoImage = logoIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH); 
+            logoIcon = new ImageIcon(logoImage);
+            JLabel logoLabel = new JLabel(logoIcon);
+            logoTopPanel.add(logoLabel);
+        } else {
+            JLabel logoText = new JLabel("LIVRARIA"); 
+            logoText.setFont(new Font("Serif", Font.BOLD, 20));
+            logoText.setForeground(Color.WHITE);
+            logoTopPanel.add(logoText);
+            System.err.println("Erro ao carregar a imagem da logo na TelaLogin: " + logoPath);
+        }
+        painelPrincipal.add(logoTopPanel, BorderLayout.NORTH);
+
+        JPanel painelConteudo = new JPanel();
+        painelConteudo.setLayout(new BoxLayout(painelConteudo, BoxLayout.Y_AXIS));
+        painelConteudo.setBackground(new Color(249, 237, 202));
+        painelConteudo.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
         JPanel painelTítulo = new JPanel();
         painelTítulo.setBackground(new Color(249, 237, 202));
         painelTítulo.setLayout(new BoxLayout(painelTítulo, BoxLayout.Y_AXIS));
@@ -48,7 +83,7 @@ public class TelaLogin extends JFrame{
         painelFormulario.setBackground(new Color(249, 237, 202));
         GridBagConstraints gbc = new GridBagConstraints();
         
-        JLabel labelEmail = new JLabel("E-mail (gamil): ");
+        JLabel labelEmail = new JLabel("E-mail (gmail): ");
         labelEmail.setFont(new Font("Serif", Font.PLAIN, 14));
         labelEmail.setForeground(new Color(89, 55, 30));
         
@@ -67,7 +102,7 @@ public class TelaLogin extends JFrame{
         gbc.weightx = 1.0;
         
         gbc.gridx = 0;
-        gbc.gridx = 0;
+        gbc.gridy = 0; 
         painelFormulario.add(labelEmail, gbc);
         
         gbc.gridy = 1;
@@ -85,23 +120,47 @@ public class TelaLogin extends JFrame{
         bntConcluir.setForeground(Color.WHITE);
         bntConcluir.setFocusPainted(false);
         bntConcluir.setFont(new Font("Serif", Font.BOLD, 14));
-        bntConcluir.setMaximumSize(new Dimension(200, 30));
+        // AJUSTADO: Definindo o tamanho preferencial para 100x40 para coincidir com o botão 'Sair'
+        bntConcluir.setPreferredSize(new Dimension(100, 70)); 
         bntConcluir.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         bntConcluir.setHorizontalAlignment(SwingConstants.CENTER);
         
-        painel.add(painelTítulo);
-        painel.add(subtitulo);
-        painel.add(painelFormulario);
-        painel.add(Box.createRigidArea(new Dimension(0, 20)));
-        painel.add(bntConcluir);
+        // NOVO: Painel para envolver o botão "Concluir" e centralizá-lo corretamente
+        JPanel concluirButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        concluirButtonPanel.setBackground(new Color(249, 237, 202)); // Mesma cor de fundo
+        concluirButtonPanel.add(bntConcluir);
+
+        painelConteudo.add(painelTítulo);
+        painelConteudo.add(subtitulo);
+        painelConteudo.add(painelFormulario);
+        painelConteudo.add(Box.createRigidArea(new Dimension(0, 20)));
+        painelConteudo.add(concluirButtonPanel); // Adiciona o novo painel com o botão
         
-        add(painel);
-        setSize(380, 340);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
+        painelPrincipal.add(painelConteudo, BorderLayout.CENTER);
+
+        JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        southPanel.setBackground(new Color(249, 237, 202)); 
+        southPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        JButton btnSairTelaLogin = new JButton("Sair");
+        btnSairTelaLogin.setFocusPainted(false);
+        btnSairTelaLogin.setBackground(new Color(200, 0, 0)); 
+        btnSairTelaLogin.setForeground(Color.WHITE);
+        btnSairTelaLogin.setFont(new Font("Serif", Font.BOLD, 14));
+        btnSairTelaLogin.setPreferredSize(new Dimension(100, 40)); 
+        btnSairTelaLogin.addActionListener(e -> {
+            dispose(); 
+        });
+        southPanel.add(btnSairTelaLogin);
         
-                bntConcluir.addActionListener(e -> {
+        painelPrincipal.add(southPanel, BorderLayout.SOUTH);
+
+        add(painelPrincipal); 
+        pack(); // Re-empacota a janela para ajustar ao novo tamanho dos componentes
+        setLocationRelativeTo(null); 
+        setVisible(true); 
+        
+        bntConcluir.addActionListener(e -> {
             String email = campoEmail.getText();
             String senha = new String(campoSenha.getPassword());
 
