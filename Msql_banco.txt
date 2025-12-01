@@ -1,0 +1,152 @@
+-- Criação do banco de dados
+CREATE DATABASE IF NOT EXISTS `menuprodutos` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `menuprodutos`;
+
+-- Configurações iniciais
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+-- Tabela de usuários
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome_completo` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `senha` varchar(255) NOT NULL,
+  `telefone` varchar(20) DEFAULT NULL,
+  `endereco` text DEFAULT NULL,
+  `tipo_usuario` enum('Cliente','Admin') DEFAULT 'Cliente',
+  `data_cadastro` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Tabela de produtos
+CREATE TABLE `produtos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(200) NOT NULL,
+  `genero` varchar(100) NOT NULL,
+  `estoque` int(11) NOT NULL,
+  `preco` decimal(10,2) NOT NULL,
+  `tipo_produto` enum('LIVRO','CD','DVD') NOT NULL,
+  `caminho_imagem` varchar(255) DEFAULT NULL,
+  `descricao_detalhada` text DEFAULT NULL,
+  `autor` varchar(200) DEFAULT NULL,
+  `editora` varchar(200) DEFAULT NULL,
+  `edicao` varchar(100) DEFAULT NULL,
+  `artista` varchar(200) DEFAULT NULL,
+  `gravadora` varchar(200) DEFAULT NULL,
+  `pais_origem` varchar(100) DEFAULT NULL,
+  `diretor` varchar(200) DEFAULT NULL,
+  `duracao` varchar(50) DEFAULT NULL,
+  `censura` varchar(20) DEFAULT NULL,
+  `imagem_bytes` longblob DEFAULT NULL,
+  `data_cadastro` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Tabela de carrinho do usuário
+CREATE TABLE `carrinho_usuario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` int(11) NOT NULL,
+  `id_produto` int(11) NOT NULL,
+  `quantidade` int(11) NOT NULL DEFAULT 1,
+  `nome_produto` varchar(100) NOT NULL,
+  `categoria` varchar(50) NOT NULL,
+  `preco` decimal(10,2) NOT NULL,
+  `data_adicao` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `id_usuario` (`id_usuario`),
+  CONSTRAINT `carrinho_usuario_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Tabela de pedidos
+CREATE TABLE `pedidos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo_pedido` varchar(20) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `nome_cliente` varchar(100) NOT NULL,
+  `endereco` text NOT NULL,
+  `telefone` varchar(20) NOT NULL,
+  `cpf` varchar(14) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `preco_total` decimal(10,2) NOT NULL,
+  `status` enum('Pendente','Pago','Preparando','Enviado','Entregue','Cancelado') DEFAULT 'Pendente',
+  `data_pedido` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `codigo_pedido` (`codigo_pedido`),
+  KEY `id_usuario` (`id_usuario`),
+  CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Tabela de itens do pedido
+CREATE TABLE `itens_pedido` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo_pedido` varchar(20) NOT NULL,
+  `id_produto` int(11) NOT NULL,
+  `nome_produto` varchar(100) NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  `preco_unitario` decimal(10,2) NOT NULL,
+  `preco_total` decimal(10,2) NOT NULL,
+  `categoria` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `codigo_pedido` (`codigo_pedido`),
+  CONSTRAINT `itens_pedido_ibfk_1` FOREIGN KEY (`codigo_pedido`) REFERENCES `pedidos` (`codigo_pedido`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Tabela de perfil do usuário
+CREATE TABLE `perfil_usuario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` int(11) NOT NULL,
+  `imagem_perfil` longblob DEFAULT NULL,
+  `data_atualizacao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_usuario` (`id_usuario`),
+  CONSTRAINT `perfil_usuario_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Inserção de dados de exemplo para usuários
+INSERT INTO `usuarios` (`id`, `nome_completo`, `email`, `senha`, `telefone`, `endereco`, `tipo_usuario`) VALUES
+(1, 'Administrador Vinicius', 'ViniAdmin@gmail.com', 'admin123', '(11) 99999-9999', 'Rua Admin, 123 - São Paulo, SP', 'Admin'),
+(2, 'Administrador Maria', 'MariAdmin@gmail.com', 'admin123', '(11) 88888-8888', 'Av. Principal, 456 - Rio de Janeiro, RJ', 'Admin'),
+(3, 'Administrador Sofia', 'SofiaAdmin@gmail.com', 'admin123', '(11) 77777-7777', 'Rua Central, 789 - Belo Horizonte, MG', 'Admin'),
+(4, 'João Silva', 'joao.silva@email.com', '123456', '(11) 11111-1111', 'Rua das Flores, 123 - São Paulo, SP', 'Cliente'),
+(5, 'Maria Santos', 'maria.santos@email.com', '123456', '(11) 22222-2222', 'Av. Brasil, 456 - Rio de Janeiro, RJ', 'Cliente'),
+(6, 'Pedro Oliveira', 'pedro.oliveira@email.com', '123456', '(11) 33333-3333', 'Rua Central, 789 - Belo Horizonte, MG', 'Cliente');
+
+-- Inserção de dados de exemplo para produtos (Livros)
+INSERT INTO `produtos` (`descricao`, `genero`, `estoque`, `preco`, `tipo_produto`, `caminho_imagem`, `descricao_detalhada`, `autor`, `editora`, `edicao`) VALUES
+('A Biblioteca da Meia-Noite', 'Ficção', 10, 69.90, 'LIVRO', 'src/assets/images/livro1.png', 'Nora Seed encontra uma biblioteca entre a vida e a morte, com chances de viver outras vidas.', 'Matt Haig', 'Editora XYZ', '1ª Edição'),
+('A Empregada', 'Suspense', 8, 40.20, 'LIVRO', 'src/assets/images/livro2.png', 'Um suspense psicológico com reviravoltas inesperadas em uma casa cheia de segredos.', 'Freida McFadden', 'Editora XYZ', '1ª Edição'),
+('A Garota do Lago', 'Mistério', 12, 25.90, 'LIVRO', 'src/assets/images/livro3.png', 'Um mistério envolvente na atmosfera sombria de um lago, investigado por uma jornalista.', 'Charlie Donlea', 'Editora ABC', 'Edição de Luxo'),
+('A Hipótese do Amor', 'Romance', 14, 39.99, 'LIVRO', 'src/assets/images/livro4.png', 'Quando um falso namoro científico se torna uma atração real, as teorias sobre o amor são testadas.', 'Ali Hazelwood', 'Editora LER', '2ª Edição'),
+('A Revolução dos Bichos', 'Fábula', 20, 24.20, 'LIVRO', 'src/assets/images/livro6.png', 'Uma alegoria satírica sobre o totalitarismo através da revolução dos animais em uma fazenda.', 'George Orwell', 'Editora XYZ', 'Edição de Bolso'),
+('Assim que Acaba Assim que Começa', 'Romance', 7, 150.00, 'LIVRO', 'src/assets/images/livro8.png', 'Uma história de amor intensa e carregada de emoções conflitantes e difíceis decisões.', 'Colleen Hoover', 'Editora Nova', 'Primeira Edição');
+
+-- Inserção de dados de exemplo para produtos (CDs)
+INSERT INTO `produtos` (`descricao`, `genero`, `estoque`, `preco`, `tipo_produto`, `caminho_imagem`, `descricao_detalhada`, `artista`, `gravadora`, `pais_origem`) VALUES
+('1989', 'Pop', 25, 70.90, 'CD', 'src/assets/images/cd1.jpg', 'Quinto álbum pop de Taylor Swift.', 'TAYLOR SWIFT', 'Republic Records', 'EUA'),
+('After Hours', 'R&B', 25, 40.20, 'CD', 'src/assets/images/cd2.jpg', 'O quarto álbum R&B de The Weeknd.', 'THE WEEKND', 'XO/Republic', 'Canadá'),
+('A Night at the Opera', 'Rock', 25, 79.90, 'CD', 'src/assets/images/cd4.jpg', 'Álbum de rock icônico do Queen.', 'QUEEN', 'EMI', 'Reino Unido'),
+('Rumours', 'Rock', 25, 39.99, 'CD', 'src/assets/images/cd17.jpg', 'Álbum de rock clássico do Fleetwood Mac.', 'FLEETWOOD MAC', 'Warner Bros. Records', 'EUA');
+
+-- Inserção de dados de exemplo para produtos (DVDs)
+INSERT INTO `produtos` (`descricao`, `genero`, `estoque`, `preco`, `tipo_produto`, `caminho_imagem`, `descricao_detalhada`, `diretor`, `duracao`, `censura`) VALUES
+('A Culpa é das Estrelas', 'Romance', 15, 29.90, 'DVD', 'src/assets/images/Dvd1.jpg', 'Romance emocionante sobre jovens com câncer.', 'Josh Boone', '125 min', '12 anos'),
+('A Espera de um Milagre', 'Drama', 12, 39.90, 'DVD', 'src/assets/images/Dvd2.jpg', 'Drama comovente sobre um guarda prisional.', 'Frank Darabont', '189 min', '14 anos'),
+('A Teoria de Tudo', 'Biografia', 17, 39.90, 'DVD', 'src/assets/images/Dvd6.jpg', 'Biografia inspiradora de Stephen Hawking.', 'James Marsh', '123 min', '12 anos'),
+('Avengers: Endgame', 'Ação', 25, 79.90, 'DVD', 'src/assets/images/Dvd7.jpg', 'O épico final da saga dos Vingadores.', 'Anthony Russo, Joe Russo', '181 min', '12 anos');
+
+-- Inserção de dados de exemplo para pedidos
+INSERT INTO `pedidos` (`codigo_pedido`, `id_usuario`, `nome_cliente`, `endereco`, `telefone`, `cpf`, `email`, `preco_total`, `status`) VALUES
+('PED2024001', 4, 'João Silva', 'Rua das Flores, 123 - São Paulo, SP', '(11) 11111-1111', '123.456.789-00', 'joao.silva@email.com', 149.80, 'Entregue'),
+('PED2024002', 5, 'Maria Santos', 'Av. Brasil, 456 - Rio de Janeiro, RJ', '(11) 22222-2222', '987.654.321-00', 'maria.santos@email.com', 89.90, 'Preparando');
+
+-- Inserção de dados de exemplo para itens do pedido
+INSERT INTO `itens_pedido` (`codigo_pedido`, `id_produto`, `nome_produto`, `quantidade`, `preco_unitario`, `preco_total`, `categoria`) VALUES
+('PED2024001', 1, 'A Biblioteca da Meia-Noite', 1, 69.90, 69.90, 'LIVRO'),
+('PED2024001', 26, '1989', 1, 70.90, 79.90, 'CD'),
+('PED2024002', 8, 'Assim que Acaba Assim que Começa', 1, 150.00, 150.00, 'LIVRO'),
+('PED2024002', 43, 'A Culpa é das Estrelas', 1, 29.90, 29.90, 'DVD');
+
+COMMIT;

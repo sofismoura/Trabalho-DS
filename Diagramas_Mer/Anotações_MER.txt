@@ -1,0 +1,94 @@
+MerDiagrama-Anotações
+
+    USUARIO {
+        int id PK
+        varchar nome
+        varchar email
+        varchar senha
+        varchar telefone
+        varchar cpf
+        varchar endereco
+    }
+
+    PERFIL_USUARIO {
+        int id PK
+        int id_usuario FK
+        blob imagem_perfil
+        timestamp data_atualizacao
+    }
+
+    PRODUTO {
+        int id PK
+        varchar descricao
+        decimal preco
+        varchar categoria
+        -- Outros atributos genéricos de produto (estoque, etc. - implícitos)
+    }
+
+    LIVRO {
+        int id PK
+        varchar autor
+        int paginas
+        -- ... atributos específicos de Livro
+    }
+
+    CD {
+        int id PK
+        varchar artista
+        varchar genero
+        -- ... atributos específicos de CD
+    }
+
+    DVD {
+        int id PK
+        varchar diretor
+        int duracao_min
+        -- ... atributos específicos de DVD
+    }
+
+    ITEM_CARRINHO {
+        int id PK
+        int id_usuario FK
+        int id_produto FK
+        int quantidade
+        decimal preco
+        varchar nome_produto
+        varchar categoria
+        timestamp data_adicao
+    }
+
+    PEDIDO {
+        int id PK
+        varchar codigo_pedido UK "Código Único do Pedido"
+        int id_usuario FK
+        varchar nome_cliente
+        text endereco
+        varchar telefone
+        varchar cpf
+        varchar email
+        decimal preco_total
+        enum status "Pendente, Pago, Preparando, Enviado, Entregue, Cancelado"
+        timestamp data_pedido
+    }
+
+    ITEM_PEDIDO {
+        int id PK
+        varchar codigo_pedido FK
+        int id_produto FK
+        varchar nome_produto
+        int quantidade
+        decimal preco_unitario
+        decimal preco_total
+        varchar categoria
+    }
+
+    USUARIO ||--o{ PERFIL_USUARIO : "possui 1"
+    USUARIO ||--o{ ITEM_CARRINHO : "adiciona N"
+    USUARIO ||--o{ PEDIDO : "faz N"
+    PEDIDO ||--o{ ITEM_PEDIDO : "contém N"
+    PRODUTO ||--o{ ITEM_CARRINHO : "está em N"
+    PRODUTO ||--o{ ITEM_PEDIDO : "está em N"
+
+    PRODUTO <|-- LIVRO : "é um"
+    PRODUTO <|-- CD : "é um"
+    PRODUTO <|-- DVD : "é um"
