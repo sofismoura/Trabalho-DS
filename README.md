@@ -1,9 +1,6 @@
 # Projeto Biblioteca Java: Sistema de Livraria Digital e E-commerce
 
 **Aplicação Desktop com Java Swing, Banco de Dados MySQL e Arquitetura Modular**
-
-[Logo.png]
-
 ---
 
 ## 1. Introdução
